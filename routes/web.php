@@ -20,6 +20,7 @@ Route::get('/data-tables', function () {
     return view('data_tables');
 });
 
+
 // Route::get('/', function () {
 //     return view('welcome');
 // });
