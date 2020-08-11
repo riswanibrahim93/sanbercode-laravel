@@ -17,10 +17,7 @@
     @endif
       <form method="POST" action="/pertanyaan" class="mx-5">
         @csrf
-        <div class="form-group">
-          <label for="nama">Nama</label>
-          <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama"  name="nama" placeholder="Masukkan Nama" value="{{ old('nama') }}">
-        </div>
+        
         <div class="form-group">
           <label for="judul">Judul</label>
           <input type="text" class="form-control @error('judul') is-invalid @enderror" id="judul"  name="judul" placeholder="Masukkan Judul" value="{{ old('judul') }}">
