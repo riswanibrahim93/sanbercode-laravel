@@ -5,10 +5,10 @@
 @section('container')
     
       <div class="card m-auto" style="width: 25rem;">
-        <img class="card-img-top" src="{{ $detail->foto }}" class="card-img-top" alt="...">
+       
         <div class="card-body">
           <h5 class="card-title">{{ $detail->judul }}</h5>
-          <h6 class="card-text">{{ $detail->nama_lengkap }}</h6>
+          <h6 class="card-text">{{ $detail->name }}</h6>
           <h6 class="card-text">{{ $detail->email }}</h6>
           <p class="card-text">{{ $detail->isi }}</p>
           <h6 class="card-subtitle mb-2 text-muted">{{ $detail->tanggal_dibuat }}</h6>
