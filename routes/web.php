@@ -16,16 +16,19 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('index');
 });
-Route::get('/data-tables', function () {
-    return view('data_tables');
-});
-Route::get('/pertanyaan','PertanyaanController@index');
-Route::get('/pertanyaan/create','PertanyaanController@create');
-Route::post('/pertanyaan','PertanyaanController@store');
-Route::get('/pertanyaan/{pertanyaan_id}','PertanyaanController@show');
-Route::get('/pertanyaan/{pertanyaan_id}/edit','PertanyaanController@edit');
-Route::put('/pertanyaan/{pertanyaan_id}','PertanyaanController@update');
-Route::delete('/pertanyaan/{pertanyaan_id}','PertanyaanController@destroy');
+Route::resource('pertanyaan', 'PertanyaanController');
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
 
 // Route::get('/', function () {
 //     return view('welcome');
