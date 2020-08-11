@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use App\pertanyaan;
+use App\Profile;
+use Illuminate\Support\Facades\Auth;
 
 class PertanyaanController extends Controller
 {
@@ -13,10 +16,17 @@ class PertanyaanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['index']);
+    }
+
     public function index()
     {
-        $pertanyaans = DB::table('pertanyaans')->get();
-        return view('WebDiskusi.pertanyaan', ['pertanyaans' => $pertanyaans]);
+        // $pertanyaans = DB::table('pertanyaans')->get();
+        $pertanyaans = pertanyaan::all();
+        return view('WebDiskusi.pertanyaan', compact('pertanyaans'));
     }
 
     /**
@@ -38,30 +48,37 @@ class PertanyaanController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama'=>'required',
             'judul'=>'required',
             'isi'=>'required'
         ]);
 
-        $users = DB::table('profiles')->get();
+        
+        // $users = DB::table('profiles')->get();
+        // $users = Profile::all();
 
-        foreach ($users as $user) {
-            if ($user->nama_lengkap == $request->nama) {
-                 DB::table('pertanyaans')->insert([
-                    'judul' => $request->judul, 
-                    'isi' => $request->isi,
-                    'tanggal_dibuat' => now(),
-                    'profile_id' => $user->id_profile
-                ]);
+        // foreach ($users as $user) {
+        //     if ($user->nama_lengkap == $request->nama) {
+                //  DB::table('pertanyaans')->insert([
+                //     'judul' => $request->judul, 
+                //     'isi' => $request->isi,
+                //     'tanggal_dibuat' => now(),
+                //     'profile_id' => $user->id_profile
+                // ]);
+                $pertanyaan = new pertanyaan;
+                $pertanyaan->judul = $request->judul;
+                $pertanyaan->isi = $request->isi;
+                $pertanyaan->tanggal_dibuat = now();
+                $pertanyaan->user_id = Auth::id();
+                $pertanyaan->save();
+
                 return redirect('/pertanyaan/create')->with('status_done','Pertanyaan Berhasil Ditambahkan');
-            }
-            else
-            {
-                return redirect('/pertanyaan/create')->with('status','Nama Anda Belum Terdaftar!!!');
-            }
-        }
-        // return "csdc";
-       
+        //     }
+        //     else
+        //     {
+        //         return redirect('/pertanyaan/create')->with('status','Nama Anda Belum Terdaftar!!!');
+        //     }
+        // }
+        // return Auth::user();
     }
 
     /**
@@ -72,10 +89,11 @@ class PertanyaanController extends Controller
      */
     public function show($id)
     {
-        $detail = DB::table('pertanyaans')->join('profiles', 'pertanyaans.profile_id', '=', 'profiles.id_profile')->where('pertanyaans.profile_id', $id)->first();
+        // $detail = DB::table('pertanyaans')->join('profiles', 'pertanyaans.profile_id', '=', 'profiles.id_profile')->where('pertanyaans.profile_id', $id)->first();
+        $detail = pertanyaan::join('users', 'pertanyaans.user_id', '=', 'users.id')->where('pertanyaans.id_pertanyaan', $id)->first();
         
         // return $detail->judul;
-        return view('WebDiskusi.detail', ['detail' => $detail]);
+        return view('WebDiskusi.detail', compact('detail'));
     }
 
     /**
@@ -86,7 +104,8 @@ class PertanyaanController extends Controller
      */
     public function edit($id)
     {
-        return view('WebDiskusi.ubah', ['id' => $id] );
+        $pertanyaan = pertanyaan::find($id);
+        return view('WebDiskusi.ubah', compact('pertanyaan') );
     }
 
     /**
@@ -98,20 +117,27 @@ class PertanyaanController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $pertanyaans = DB::table('pertanyaans')->get();
+        // $pertanyaans = DB::table('pertanyaans')->get();
 
-        foreach ($pertanyaans as $pertanyaan) {
-            if ($pertanyaan->id_pertanyaan == $id) {
-                DB::table('pertanyaans')
-              ->where('id_pertanyaan', $id)
-              ->update([
-                'judul' => $request->judul,
-                'isi' => $request->isi,
-                'tanggal_diperbaharui' => now()
-            ]);
-              return redirect('/pertanyaan')->with('status_ubah','Pertanyaan Berhasil Diubah');
-            }
-        }
+        // foreach ($pertanyaans as $pertanyaan) {
+        //     if ($pertanyaan->id_pertanyaan == $id) {
+        //         DB::table('pertanyaans')
+        //       ->where('id_pertanyaan', $id)
+        //       ->update([
+        //         'judul' => $request->judul,
+        //         'isi' => $request->isi,
+        //         'tanggal_diperbaharui' => now()
+        //     ]);
+        //       return redirect('/pertanyaan')->with('status_ubah','Pertanyaan Berhasil Diubah');
+        //     }
+        // }
+
+        $pertanyaan = pertanyaan::find($id);
+        $pertanyaan->judul = $request->judul;
+        $pertanyaan->isi = $request->isi;
+        $pertanyaan->tanggal_diperbaharui = now();
+        $pertanyaan->save();
+        return redirect('/pertanyaan')->with('status_ubah','Pertanyaan Berhasil Diubah');
     }
 
     /**
@@ -122,7 +148,9 @@ class PertanyaanController extends Controller
      */
     public function destroy($id)
     {
-        DB::table('pertanyaans')->where('id_pertanyaan', $id)->delete();
+        // DB::table('pertanyaans')->where('id_pertanyaan', $id)->delete();
+        $pertanyaan = pertanyaan::find($id);
+        $pertanyaan->delete();
         return redirect('/pertanyaan')->with('status','Pertanyaan Berhasil Dihapus');
     }
 }
