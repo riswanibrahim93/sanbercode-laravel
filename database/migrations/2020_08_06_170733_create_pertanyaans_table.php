@@ -20,7 +20,9 @@ class CreatePertanyaansTable extends Migration
             $table->date('tanggal_dibuat');
             $table->date('tanggal_diperbaharui');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('jawaban_id');
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('jawaban_id')->references('id_jawaban')->on('jawabans');
         });
     }
 
