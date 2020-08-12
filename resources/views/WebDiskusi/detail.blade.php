@@ -13,7 +13,11 @@
           <p class="card-text">{{ $detail->isi }}</p>
           <h6 class="card-subtitle mb-2 text-muted">{{ $detail->tanggal_dibuat }}</h6>
           <h6 class="card-subtitle mb-2 text-muted">{{ $detail->tanggal_diperbaharui }}</h6>
-
+          <div class="mb-3">
+            @foreach($detail->tags as $tag)
+              <a href="" class="badge badge-primary badge-pill">{{$tag->nama_tag}}</a>
+            @endforeach
+          </div>
           <a href="{{$detail->id_pertanyaan}}/edit" class="btn btn-primary mr-1">Ubah</a>
           <form action="{{$detail->id_pertanyaan}}" method="post" class="d-inline">
             @method('delete')
@@ -23,5 +27,4 @@
           <a href="/pertanyaan" class="card-link mr-1">Kembali</a>
         </div>
       </div>
-
 @endsection
