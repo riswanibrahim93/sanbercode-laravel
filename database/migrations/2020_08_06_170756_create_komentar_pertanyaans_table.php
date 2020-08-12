@@ -13,14 +13,14 @@ class CreateKomentarPertanyaansTable extends Migration
      */
     public function up()
     {
-        Schema::create('komentar_pertanyaans', function (Blueprint $table) {
-            $table->bigIncrements('id_komentar_pertanyaan');
-            $table->string('isi');
-            $table->date('tanggal_dibuat');
-            $table->unsignedBigInteger('profile_id');
-            $table->unsignedBigInteger('pertanyaan_id');
-            $table->foreign('profile_id')->references('id_profile')->on('profiles');
-            $table->foreign('pertanyaan_id')->references('id_pertanyaan')->on('pertanyaans');
+        Schema::create('users', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->rememberToken();
+            $table->timestamps();
         });
     }
 
