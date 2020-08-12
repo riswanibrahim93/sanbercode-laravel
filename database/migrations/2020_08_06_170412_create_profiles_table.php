@@ -13,7 +13,7 @@ class CreateProfilesTable extends Migration
      */
     public function up()
     {
-        Schema::create('profiles', function (Blueprint $table) {
+       Schema::create('profiles', function (Blueprint $table) {
             $table->bigIncrements('id_profile');
             $table->string('nama_lengkap');
             $table->string('email');
