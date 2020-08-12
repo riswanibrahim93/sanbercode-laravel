@@ -19,13 +19,16 @@ class PertanyaanController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth')->except(['index','show']);
+        $this->middleware('auth')->except(['index', 'show']);
     }
 
     public function index()
     {
+
         // $pertanyaans = DB::table('pertanyaans')->get();
-        $pertanyaans = pertanyaan::all();
+        $user = Auth::user();
+        // dd($user->pertanyaan);
+        $pertanyaans = $user->pertanyaan;
         return view('WebDiskusi.pertanyaan', compact('pertanyaans'));
     }
 
